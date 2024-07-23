@@ -21,13 +21,26 @@ import jakarta.persistence.Id;
         </dependency>
  */
 
-@Entity 
+
+// 2. **In-memory Database (Using H2 with Spring Boot)**:
+/* - **Persistence**: Data is persisted during application runtime but lost on restart unless an external H2 database is used. <- but better with postgreSQL
+- **Complexity**: Moderate; requires setting up JPA and an entity class.
+- **Scalability**: Better than an array, supports complex queries.
+- **Use Case**: Suitable for development, testing, or small applications that do not require long-term persistence. */
+
+// ONLY HAVE TO CHANGE dependencies and application.properties to swap to postgreSQL!!!!! <- host postgreSQL on AWS RDS for example, or test with MAMP?
+@Entity  // simpliifed SQL...
 public class Highscore {
 
-  @Id
+  @Id // simplified SQL...
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  private String title;
+  // JPA will automatically create columns based on the field names in your entity class.
+  // can set @Columns here but not needed
+  // @Column(name = "highscore_title", nullable = false, length = 100)
+  private String title; 
+  // can set @Columns here but not needed
+  // @Column(name = "sequence_length", nullable = false)
   private int sequenceLength;
 
   // Default constructor, empty because:

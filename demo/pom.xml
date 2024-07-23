@@ -53,6 +53,19 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Spring Security -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+
+		 <!-- JWT (token-based authentication) -->
+    <dependency>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt</artifactId>
+        <version>0.9.1</version>
+    </dependency>
+
 		 <!-- New dependencies added for JPA and H2 -->
 		<dependency>
 				<groupId>org.springframework.boot</groupId>
