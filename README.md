@@ -73,8 +73,8 @@ To get started with the Memory Circle Game, follow these steps:
    Open the backend directory in your preferred Java IDE, such as IntelliJ IDEA, Eclipse, or Visual Studio Code.
 
 3. **Run the application**
-   Locate the main application class, typically annotated with @SpringBootApplication.
-   Right-click on the main class file and select Run Java or the equivalent run option in your IDE.
+   Locate the main application class (including the @SpringBootApplication annotation): DemoApplication.java
+   Right-click on DemoApplication.java and select Run Java or the equivalent run option in your IDE.
 
 ### Backend Setup (Maven)
 
