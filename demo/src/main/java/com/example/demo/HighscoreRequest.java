@@ -1,5 +1,6 @@
 package com.example.demo;
 
+// Could have named this HighscoreDTO
 // handling incoming request data... DTO: Data Transfer Object
 // this is basically like Highscore, but specifically for data requests... when POST or GET from frontend etc... Highscore is used throughout the backend, HighscoreRequest is just in the communication between frontend and backend... I think?
 public class HighscoreRequest {
@@ -7,7 +8,7 @@ public class HighscoreRequest {
   private String titleDifficultyPerfected; // the variable the POST request will send the highscore title to...
   private int sequenceLength; // the variable the POST request will send the highscore sequence length to...
   
-  // Default constructor
+  // Default constructor, need an empty default constructor for creation because...
   public HighscoreRequest() {}
 
   // Parametrized constructor, not needed really?

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+// define what will be sent to frontend and stuff
 @Service
 public class HighscoreService {
 
