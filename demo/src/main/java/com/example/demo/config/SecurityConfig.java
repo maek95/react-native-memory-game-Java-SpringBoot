@@ -37,27 +37,18 @@ public class SecurityConfig {
     http
     .csrf(csrf -> csrf.disable()) // Disable CSRF protection (enable in production)
     .authorizeHttpRequests(auth -> auth
-        .requestMatchers("/api/users/register", "api/login").permitAll() // Allow anyone to access the register endpoint
+        .requestMatchers("/**").permitAll() 
         .anyRequest().authenticated() // All other requests need to be authenticated
+        //.requestMatchers("/api/users/register", "/api/login", "/hello").permitAll()
     )
-    .formLogin(form -> form
-        .loginPage("/login").permitAll() // Specify a custom login page or default behavior
-                .defaultSuccessUrl("/home", true) // Specify the default success URL
-                .successHandler((request, response, authentication) -> {
-                    response.setStatus(HttpServletResponse.SC_OK);
-                    // custom success handling
-                     // Respond with 200 OK instead of redirecting.. now that I work in Thunderclient... and I guess I want redirections to be handled on frontend (?)
-                }).failureHandler((request, response, exception) -> {
-                  // custom failer handler... 
-                  // we have seperate failure handling on frontend ofc
-                  response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                  response.setContentType("application/json");
-                  response.getWriter().write("{\"error\": \"Login failed: " + exception.getMessage() + "\"}"); // e.g. 401 Unauthorized {"error": "Login failed: Bad credentials"}
-                })
-    )
-    .logout(logout -> logout
-        .permitAll() // Allow everyone to log out
+    .exceptionHandling(exceptionHandling -> exceptionHandling
+        .authenticationEntryPoint((request, response, authException) -> {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\": \"Unauthorized: " + authException.getMessage() + "\"}");
+        })
     );
+    
 
     return http.build();
   }

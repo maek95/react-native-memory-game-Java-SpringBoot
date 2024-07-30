@@ -40,8 +40,8 @@ public class AuthenticationController {
     final UserDetails userDetails = userDetailsService.loadUserByUsername(authentication.getUsername());
     final String jwt = jwtTokenUtil.generateToken(userDetails.getUsername());
       
-
-    return new AuthenticationDTO(jwt);
+    // send 'jwt' and 'username' to frontend after succesful login... accessed on frontend by e.g. data.jwt and data.username. It follows structure of AuthenticationDTO.java
+    return new AuthenticationDTO(jwt, userDetails.getUsername());
   }
   
 }

@@ -22,7 +22,9 @@ public class DemoApplication {
 	// http://localhost:8080/hello 
 	@CrossOrigin(origins = "*")		// allow all origins
 	@GetMapping("/hello")
-	public String hello(@RequestParam (value="name", defaultValue = "springboot") String name) {
+	public String hello(@RequestParam (defaultValue = "springboot") String name) {
+		//public String hello(@RequestParam (value="name", defaultValue = "springboot") String name) {
+
 		return String.format("{\"message\": \"Hello %s\"}", name); // Return JSON formatted string... {"message": "Hello springboot"}
 	}
 

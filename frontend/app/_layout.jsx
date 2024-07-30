@@ -5,6 +5,7 @@ import { ContextProvider } from '../context';
 import { useFonts } from 'expo-font';
 import { useEffect } from 'react';
 import { View } from 'react-native';
+import { AuthProvider } from '../AuthContext';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -29,12 +30,14 @@ export default function Layout() {
 
   return (
     <SafeAreaProvider> 
+      <AuthProvider>
       <ContextProvider>
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
     
       </ContextProvider>
+      </AuthProvider>
     </SafeAreaProvider>
   );
 }
