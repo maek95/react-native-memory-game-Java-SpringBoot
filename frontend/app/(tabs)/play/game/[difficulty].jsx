@@ -14,6 +14,7 @@ import { Path, Svg } from "react-native-svg";
 import { LinearGradient } from "expo-linear-gradient";
 import { Shadow } from "react-native-shadow-2";
 import { host } from "../../../utils";
+import { AuthContext } from "../../../../AuthContext";
 
 export default function GameDetail() {
   const [gameIsStarted, setGameIsStarted] = useState(false);
@@ -37,6 +38,8 @@ export default function GameDetail() {
   const [timerColor, setTimerColor] = useState("white");
   const [temporaryDisabledButton, setTemporaryDisabledButton] = useState(true);
   const [sliceBaseColor, setSliceBaseColor] = useState("white");
+
+  const { currentUsername } = useContext(AuthContext);
 
   const router = useRouter();
 
@@ -310,6 +313,7 @@ export default function GameDetail() {
         body: JSON.stringify({
           titleDifficultyPerfected: local.title,
           sequenceLength: local.sequenceLength,
+          username: currentUsername,
         }),
       });
 
@@ -377,11 +381,11 @@ export default function GameDetail() {
               </Text>) : (
                 <>
                  <Text style={[{ color: "white" }, styles.gameFinishedText]}>
-                 Perfect!
-               </Text>
-               <Text style={[{ color: "white"}, styles.wrongClicksText ]}>
-                New difficulty completed: {newHighscoreTitle}!
-             </Text>
+                  Perfect!
+                </Text>
+                <Text style={[{ color: "white"}, styles.wrongClicksText ]}>
+                  New difficulty completed: {newHighscoreTitle}!
+                </Text>
              </>
               )
             )
@@ -751,6 +755,7 @@ const styles = StyleSheet.create({
     width: "100%", // otherwise the text shadow is cut off. Also works with padding
   },
   wrongClicksText: {
+    marginTop: -6, // gameFinishedText lineHeight 54 - fontsize 48 ??? idk
     fontFamily: "SourceCodePro-Bold", 
     lineHeight: 16, // same as fontSize 16, to remove unwanted spacing
   },

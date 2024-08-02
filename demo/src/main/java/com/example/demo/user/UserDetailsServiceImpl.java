@@ -1,5 +1,7 @@
 package com.example.demo.user;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,9 +20,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
      // Fetch the user from the database using the UserRepository.
+     // Converts the User object to a Spring Security UserDetails object.
     User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-    // Convert the User object to a Spring Security UserDetails object.
+    
     return org.springframework.security.core.userdetails.User.withUsername(user.getUsername()).password(user.getPassword()).authorities("USER").build();
+
+    // same thing as above but requires you to manage the list of authorities manually...?
+  /*   return new org.springframework.security.core.userdetails.User(
+    user.getUsername(),
+    user.getPassword(),
+    new ArrayList<>() // or you can fetch user roles/authorities and pass them here
+    ); */
   }
 }

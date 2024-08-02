@@ -32,8 +32,28 @@ export default function Layout() {
     <SafeAreaProvider> 
       <AuthProvider>
       <ContextProvider>
-      <Stack>
+      <Stack screenOptions={{ // style options for all tabs
+        tabBarInactiveTintColor: 'teal', 
+        tabBarActiveTintColor: 'blue',       
+        headerStyle: {
+          backgroundColor: "teal",
+          borderWidth: 0,
+         //  elevation: 0, // Remove shadow on Android // in <Tabs>?
+        //  shadowOpacity: 0, // Remove shadow on iOS  // in <Tabs>? 
+        },
+        headerTintColor: "white",
+        headerTitleStyle: {
+          fontFamily: 'SourceCodePro-Medium', 
+        },
+        tabBarLabelStyle: {
+          fontFamily: 'SourceCodePro-Regular', // 'Home', 'Play', 'Profile' in the bottom tab menu
+        },
+        headerShadowVisible: false, // remove shadow in <Stack>?
+      }}>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name='login' options={{title: "Log In", presentation: 'modal'}} />
+        <Stack.Screen name='createAccount' options={{title: "Register", presentation: 'modal'}} />
+
       </Stack>
     
       </ContextProvider>

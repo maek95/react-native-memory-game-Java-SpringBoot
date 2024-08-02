@@ -53,7 +53,8 @@ export default function HomeTab() {
  */
   //console.log(welcomeMessage);
 
-  useEffect(() => {
+  // test if backend is connected, if it is then console.log(data) will show {"message": "Hello springboot"}, otherwise console.log(`Error fetching ${host}:8080/hello`, error);
+  useEffect(() => { 
     async function fetchJavaSpringBoot() {
 
       try {
@@ -143,6 +144,13 @@ export default function HomeTab() {
         if (data.jwt && data.username) {
           //setToken()
           login(data.jwt, data.username);
+
+          // new user wont have any highscore
+          if (data.highscoreTitle && data.highscoreSequenceLength) {
+            // Store highscore information or use it as needed
+            console.log('Highscore title:', data.highscoreTitle);
+            console.log('Highscore sequence length:', data.highscoreSequenceLength);
+        }
     
         }
 
@@ -170,7 +178,7 @@ console.log("username: ", currentUsername);
       <View style={styles.buttonContainer}>
         {isLoggedIn ? (<>
           
-            <Text>Welcome back {currentUsername}</Text>
+            <Text style={styles.welcomeText}>Welcome back {currentUsername}</Text>
             <TouchableOpacity
               onPress={() => {
                 router.push("/play/selectdifficulty")
@@ -191,23 +199,23 @@ console.log("username: ", currentUsername);
             ) : ( // TODO: logged in screen? Play button? profile button? "welcome back, you have beaten Hard Difficulty - try again?!"
           <>
             <TouchableOpacity onPress={() => {
-              postLoginUser(usernameLogin, passwordLogin)
+              router.push("/login")
             }} style={styles.loginAndCreateButton}>
               <Text style={styles.buttonText}>Log In</Text>
-              
+             {/*  <FontAwesome name="arrow-right" color={"teal"} size={24} /> */}
             </TouchableOpacity>
-            <TextInput style={{backgroundColor: "black", color: "white"}} onChangeText={setUsernameLogin}></TextInput>
+           {/*  <TextInput style={{backgroundColor: "black", color: "white"}} onChangeText={setUsernameLogin}></TextInput>
 
-            <TextInput style={{backgroundColor: "blue", color: "white"}} onChangeText={setPasswordLogin}></TextInput>
+            <TextInput style={{backgroundColor: "blue", color: "white"}} onChangeText={setPasswordLogin}></TextInput> */}
 
             <TouchableOpacity onPress={() => {
-              postRegisterUser(usernameInput, passwordInput)
+              router.push("/createAccount")
             }} style={styles.loginAndCreateButton}>
               <Text style={styles.buttonText}>Create Account</Text>
             </TouchableOpacity>
-            <TextInput style={{backgroundColor: "black", color: "white"}} onChangeText={setUsernameInput}></TextInput>
+           {/*  <TextInput style={{backgroundColor: "black", color: "white"}} onChangeText={setUsernameInput}></TextInput>
 
-            <TextInput style={{backgroundColor: "blue", color: "white"}} onChangeText={setPasswordInput}></TextInput>
+            <TextInput style={{backgroundColor: "blue", color: "white"}} onChangeText={setPasswordInput}></TextInput> */}
           </>
         )}
 
@@ -255,6 +263,10 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     alignItems: "center",
     justifyContent: "center",
+    flexDirection: "row", // for if we have arrow-right
+    gap: 16,  // for if we have arrow-right
+   
+
   },
   buttonText: {
     color: "teal",
@@ -270,8 +282,14 @@ const styles = StyleSheet.create({
     justifyContent: "start",
 
   },
+  welcomeText: {
+    fontFamily: 'SourceCodePro-Regular',
+    fontSize: 24, 
+    marginTop: 88, // TODO: I guess this is fine, since gap 32 wouldnt work on the top, and wont look  the same due to above being a h1 with lineheight etc
+    color: "white"
+  },
   playButton: {
-    marginBottom: 32,
+    marginBottom: 32, // TODO: change so container sets a gap of 32 instead?
     marginTop: 32,
     backgroundColor: "white",
     paddingVertical: 8,

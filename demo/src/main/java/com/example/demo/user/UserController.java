@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.HighscoreDTO;
 import com.example.demo.exception.CustomException;
 import com.example.demo.exception.ErrorResponse;
 
@@ -45,12 +46,25 @@ public class UserController {
   return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
  }
  */
+
   // just so I can view all created users, wont actually be used otherwise
   @GetMapping("/all")
     public List<UserDTO> getAllUsers() {
         List<User> users = userService.getAllUsers();
+
         return users.stream()
-                    .map(user -> new UserDTO(user.getId(), user.getUsername()))
-                    .toList(); // Converting User to UserDTO
+                  .map(user -> {
+                    HighscoreDTO highscoreDTO = null;
+                    if (user.getHighscore() != null) {
+                      // get the user's highscore, hence e.g. user.getHighscore.getTitle()... get the highscore title specific to the user
+                      highscoreDTO = new HighscoreDTO(user.getHighscore().getId(), user.getHighscore().getTitle(), user.getHighscore().getSequenceLength(), user.getUsername());
+                    }
+                    return new UserDTO(user.getId(), user.getUsername(), highscoreDTO);
+                  }).toList();
+
+        /*  return users.stream()
+                    .map(user -> new UserDTO(user.getId(), user.getUsername(), user.getHighscore()))
+                    .toList(); // Converting User to UserDTO */
+              
     }
 }

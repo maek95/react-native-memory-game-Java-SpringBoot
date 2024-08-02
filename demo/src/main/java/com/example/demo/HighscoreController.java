@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 public class HighscoreController {
@@ -26,8 +28,8 @@ public class HighscoreController {
 
 
       // TODO: seems like highscore and stuff is not properly sent to the frontend as JSON to the frontend I think?
-      Highscore savedHighscore = highscoreService.saveHighscore(highscoreRequest);
-      return new Response(201, "User has updated highscore! savedHighscore: ", savedHighscore);
+      HighscoreDTO savedHighscore = highscoreService.saveHighscore(highscoreRequest);
+      return new Response(201, "User has updated highscore! ", savedHighscore);
     } catch (IllegalArgumentException e) { // see HighscoreService, illegal argument exception if the user has already beaten the highscore sent from frontend.
       return new Response(400, e.getMessage());
     } catch (Exception e) {
@@ -42,13 +44,19 @@ public class HighscoreController {
     return highscoreService.getAllHighscores();
   }
 
+  @GetMapping("/highscoreDTOs")
+  public List<HighscoreDTO> getAllHighscoreDTOs() {
+      return highscoreService.getAllHighscoreDTOs();
+  }
+  
+
   // class for the Response process...
   static class Response { // static class, class within another class ()
     // what can be exracted on the frontend... data.status data.message data.savedHighscore
     // private - only used inside this class... or something...
     private int status; //,,,,,,
     private String message;
-    private Highscore savedHighscore; 
+    private HighscoreDTO savedHighscore; 
 
     // constructor
     public Response(int status, String message) {
@@ -57,7 +65,7 @@ public class HighscoreController {
     }
 
     // constructor but more info if request includes savedHighscore as well?
-    public Response(int status, String message, Highscore savedHighscore) {
+    public Response(int status, String message, HighscoreDTO savedHighscore) {
       this.status = status;
       this.message = message;
       this.savedHighscore = savedHighscore;
@@ -80,11 +88,11 @@ public class HighscoreController {
       this.message = message;
     }
 
-    public Highscore getSavedHighscore() {
+    public HighscoreDTO getSavedHighscore() {
       return savedHighscore;
     }
 
-    public void setSavedHighscore(Highscore savedHighscore) {
+    public void setSavedHighscore(HighscoreDTO savedHighscore) {
       this.savedHighscore = savedHighscore;
     }
   }

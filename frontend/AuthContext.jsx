@@ -14,6 +14,8 @@ Storage Location: On iOS, the data is stored in the Keychain, and on Android, it
 Persistence: The data stored using react-native-keychain persists across app restarts and device reboots. This means that even if you stop the Expo development server with ctrl+c and restart it with npx expo start, the stored credentials will still be available.
  */
 
+// SecureStore preserves data even when restarting the app, maybe this is better than staying "online" on backend and having to fetch logged in user from backend every time on restart?
+
 export const AuthContext = createContext(null);
 
 export function AuthProvider({children}) {

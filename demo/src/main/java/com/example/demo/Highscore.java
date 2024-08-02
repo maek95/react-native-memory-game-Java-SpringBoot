@@ -1,9 +1,15 @@
 package com.example.demo;
 
+import com.example.demo.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 
 /* 
  * 
@@ -43,15 +49,21 @@ public class Highscore {
   // @Column(name = "sequence_length", nullable = false)
   private int sequenceLength;
 
+  @OneToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id", nullable = false) // foreign key relationship between two entities
+  @JsonIgnore // avoid serialization issues?
+  private User user;
+
   // Default constructor, empty because:
   /* JPA (the database thingy) providers use reflection to create instances of the entity class. This process requires a no-argument constructor to ensure that the provider can create an instance of the entity without needing any specific initialization. */
   public Highscore() {}
 
   // Parameterized constructor
-  public Highscore(String title, int sequenceLength) {
+  public Highscore(String title, int sequenceLength, User user) {
     // dont need id here?
     this.title = title;
     this.sequenceLength = sequenceLength;
+    this.user = user; // link the whole User Entity rather than just the user_id, due to how JPA  (Java Persistence API) works.
   }
 
   // Getters and setters
@@ -75,6 +87,12 @@ public class Highscore {
     this.sequenceLength = sequenceLength;
   }
 
- 
+ public User getUser() {
+    return user;
+ }
+
+ public void setUser(User user) {
+    this.user = user;
+ }
   
 }
