@@ -101,12 +101,11 @@ To get started with the Memory Circle Game, follow these steps:
 
 ## Backend Development
 
-The backend is powered by Java Spring Boot and keeps track of highscores (stored in H2) for the current session using JPA repository for data persistence. 
+The backend is powered by Java Spring Boot and allows the user to create an account to keep track of highscores (stored in H2) using JPA repository for data persistence. Currently data is deleted on restarting the backend.
 
 Work in progress:
 
-- Further enhancing the backend by enabling account creation.
-- Login requests.
-- Potentially adding custom difficulties.
+- Further enhance the backend by building an SQL-database. Supposedly easy to implement if I use PostgreSQL since H2 follows similar structure?
+- Potentially let the user add custom difficulties.
 
 Stay tuned for updates!
