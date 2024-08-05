@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { router } from "expo-router";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { LinearGradient } from "react-native-svg";
+import { LinearGradient } from "expo-linear-gradient";
+
 import { host } from "./utils";
 //import { FontAwesome } from "@expo/vector-icons"; // same thing?
 import FontAwesome from 'react-native-vector-icons/FontAwesome' 

@@ -51,7 +51,9 @@ export default function Layout() {
         headerShadowVisible: false, // remove shadow in <Stack>?
       }}>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name='login' options={{title: "Log In", presentation: 'modal'}} />
+
+        {/* modals, will not see tab menu at the bottom when entering these pages, will simply have to press back button to go back to index.jsx or profile.jsx - depending on where you came from */}
+        <Stack.Screen name='login' options={{title: "Log In", presentation: 'modal'}} /> 
         <Stack.Screen name='createAccount' options={{title: "Register", presentation: 'modal'}} />
 
       </Stack>

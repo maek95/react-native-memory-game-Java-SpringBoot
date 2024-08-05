@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-nativ
 import { AuthContext } from "../AuthContext";
 import { router, useLocalSearchParams } from "expo-router";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { LinearGradient } from "react-native-svg";
+import { LinearGradient } from "expo-linear-gradient";
 import { host } from "./utils";
 import AccountForm from "./components/AccountForm";
 

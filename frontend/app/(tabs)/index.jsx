@@ -178,7 +178,7 @@ console.log("username: ", currentUsername);
       <View style={styles.buttonContainer}>
         {isLoggedIn ? (<>
           
-            <Text style={styles.welcomeText}>Welcome back {currentUsername}</Text>
+            <Text style={styles.welcomeText}>Welcome {currentUsername}</Text>
             <TouchableOpacity
               onPress={() => {
                 router.push("/play/selectdifficulty")
@@ -198,6 +198,7 @@ console.log("username: ", currentUsername);
               </>
             ) : ( // TODO: logged in screen? Play button? profile button? "welcome back, you have beaten Hard Difficulty - try again?!"
           <>
+            <Text style={{color: "white", fontFamily: "SourceCodePro-Bold"}}>log in to track your highscores</Text>
             <TouchableOpacity onPress={() => {
               router.push("/login")
             }} style={styles.loginAndCreateButton}>
@@ -245,6 +246,7 @@ const styles = StyleSheet.create({
     //height: 300,
     bottom: 0,
   },
+
   buttonContainer: {
     width: "100%",
    /*  backgroundColor: "red", */
