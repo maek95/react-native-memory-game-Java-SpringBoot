@@ -757,6 +757,6 @@ const styles = StyleSheet.create({
   wrongClicksText: {
     marginTop: -6, // gameFinishedText lineHeight 54 - fontsize 48 ??? idk
     fontFamily: "SourceCodePro-Bold", 
-    lineHeight: 16, // same as fontSize 16, to remove unwanted spacing
+    lineHeight: 14, // same as fontSize 14, to remove unwanted spacing
   },
 });

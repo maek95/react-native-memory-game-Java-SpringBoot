@@ -3,6 +3,8 @@ package com.example.demo.authentication;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,6 +20,7 @@ import com.example.demo.user.UserRepository;
 import com.example.demo.util.JwtUtil;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 
 @RestController
@@ -77,5 +80,36 @@ public class AuthenticationController {
     //return new AuthenticationDTO(jwt, userDetails.getUsername(), highscoreTitle, highscoreSequenceLength);
     return new AuthenticationDTO(jwt, userDetails.getUsername(), highscoreDTO);
   }
+
+  // useful when backend gets restarted and data is wiped, can then send token from frontend to check if user still exists
+  @PostMapping("/verify")
+  public ResponseEntity<?> verifyToken(@RequestHeader("Authorization") String authorizationHeader) { // token sent in Authorization header
+      
+     String token = authorizationHeader.replace("Bearer ", ""); // 'Authorization': `Bearer ${token}`, // <- frontend
+
+     // in my case this is enough to "validate" the token because I have not set tokens to expire
+     String username = jwtTokenUtil.extractUsername(token);
+
+     // validate token is a safety precausion in case it is expired, or issued for a different user somehow, or tampered with 
+     if (jwtTokenUtil.validateToken(token, username)) {
+        User user = userRepository.findByUsername(username).orElseThrow(); // find user class/object
+        Optional<Highscore> optionalHighscore = highscoreRepository.findByUser(user); // optional because new users dont have a highscore yet
+        HighscoreDTO highscoreDTO = null; // null in case user has no highscore
+
+        if (optionalHighscore.isPresent()) {
+          Highscore highscore = optionalHighscore.get();
+          // highscore object that is sent to frontend (DTO)
+          highscoreDTO = new HighscoreDTO(highscore.getId(), highscore.getTitle(), highscore.getSequenceLength(), user.getUsername());
+        } else {
+          System.out.println("No highscore found for user " + user.getUsername());
+        }
+
+        return ResponseEntity.ok(new AuthenticationDTO(token, username, highscoreDTO)); // send relevant data if authentication is success, I dont extract this on frontend atm though...?
+     } else {
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("invalid token");
+     }      
+  }
+  
   
 }

@@ -1,5 +1,6 @@
 import { createContext, useEffect, useState } from "react";
 import * as SecureStore from 'expo-secure-store';
+import { host } from "./app/utils";
 
 //npx expo install expo-secure-store
 
@@ -22,6 +23,47 @@ export function AuthProvider({children}) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [token, setToken] = useState(null);
   const [currentUsername, setCurrentUsername] = useState("");
+
+  useEffect(() => {
+    if (token) { 
+      verifyToken(token); // see if user still exists in backend when loading in frontend. Backend-data may have been deleted
+    }
+  }, [])
+
+  async function verifyToken(token) {
+    try {
+      const response = await fetch(`${host}:8080/api/verify`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+          'Origin': '*', // All origins atm...
+        },
+        
+      })
+
+      if (!response.ok) {
+        console.log(`stored token is invalid, user ${currentUsername} was not found in backend. Deleting SecureStore data.`);
+        
+        await SecureStore.deleteItemAsync('userToken');
+        await SecureStore.deleteItemAsync('username');
+        setIsLoggedIn(false);
+
+      } else {
+
+        const data = await response.json();
+        console.log("Verification success:", data);
+        
+        // not needed, we 
+       /*  setToken(token);
+        setCurrentUsername(username);
+        setIsLoggedIn(true); */
+      }
+
+    } catch (error) {
+      console.error("Failed to verify token:", error);
+    }
+  }
 
   async function login(newToken, currentUsername) {
     try {
@@ -72,6 +114,8 @@ export function AuthProvider({children}) {
   useEffect(() => {
     loadToken();
   }, [])
+
+  // TODO: add an useEffect that tests the currentUsername/token on the backend, to see if the username still exists? Mainly now that the data on backend in deleted when restarted...?
 
   return (
     <AuthContext.Provider value={{token, login, logout, isLoggedIn, currentUsername}}>

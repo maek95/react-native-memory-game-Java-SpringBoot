@@ -15,12 +15,6 @@ export default function HomeTab() {
   const { isLoggedIn, login, logout, token, currentUsername } = useContext(AuthContext);
 
   const [welcomeMessage, setWelcomeMessage] = useState("");
-
-  const [usernameInput, setUsernameInput] = useState("");
-  const [passwordInput, setPasswordInput] = useState("");
-
-  const [usernameLogin, setUsernameLogin] = useState("");
-  const [passwordLogin, setPasswordLogin] = useState("");
   /* 
   useEffect(() => {
 
@@ -87,77 +81,6 @@ export default function HomeTab() {
     login()
   } */
  
-  async function postRegisterUser(username, password) {
-
-    try {
-      const response = await fetch(`${host}:8080/api/users/register` , { // fill in my current ip-address (hemnätverk)... ipconfig in command prompt and check IPv4 address
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Origin': '*', // All origins atm...
-        },
-        body: JSON.stringify({ username, password }),
-        credentials: "include", // token, needed on create account?
-      });
-
-      /* if (!response.ok) {
-        throw new Error('Network response was not ok');
-      } */
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message);
-        }
-
-        const data = await response.json();
-        console.log('User registered successfully:', data);
-
-    } catch (error) {
-      console.log(`Error in ${host}:8080/api/users/register`, error);
-    }
-  }
-
-
-  async function postLoginUser(username, password) {
-
-    try {
-      const response = await fetch(`${host}:8080/api/login` , {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Origin': '*', // All origins atm...
-        },
-        body: JSON.stringify({ username, password }),
-        credentials: "include", // token, needed on create account?
-      });
-
-      /* if (!response.ok) {
-        throw new Error('Network response was not ok');
-      } */
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.message);
-        }
-
-        const data = await response.json();
-        console.log('Login success:', data);
-
-        if (data.jwt && data.username) {
-          //setToken()
-          login(data.jwt, data.username);
-
-          // new user wont have any highscore
-          if (data.highscoreTitle && data.highscoreSequenceLength) {
-            // Store highscore information or use it as needed
-            console.log('Highscore title:', data.highscoreTitle);
-            console.log('Highscore sequence length:', data.highscoreSequenceLength);
-        }
-    
-        }
-
-    } catch (error) {
-      console.log(`Error in ${host}:8080/api/login`, error);
-    }
-  }
 
  
 console.log("token: ", token);

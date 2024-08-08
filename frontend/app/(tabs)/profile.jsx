@@ -1,13 +1,14 @@
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from "react-native";
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { useContext } from 'react';
-import { AuthContext } from '../../AuthContext';
-import { router } from 'expo-router';
+import { useContext } from "react";
+import { AuthContext } from "../../AuthContext";
+import { router } from "expo-router";
+import StatisticsGrid from "../components/StatisticsGrid";
 
 export default function ProfileTab() {
   /* need backend for this? or just localStorage to only track highscore until person deletes their localStorage? */
-  const { isLoggedIn, currentUsername } = useContext(AuthContext); 
+  const { isLoggedIn, currentUsername } = useContext(AuthContext);
 
   return (
     <SafeAreaProvider>
@@ -21,39 +22,49 @@ export default function ProfileTab() {
 
         {isLoggedIn ? (
           <>
-           <Text style={styles.title}>{currentUsername}</Text>
-           <View style={styles.mainContainer}>
-           <View style={styles.mainBorderContainer}>
-            </View>
-            <View style={styles.mainContentContainer}>
+            <Text style={styles.title}>{currentUsername}</Text>
+            <Image
+              source={require("../../assets/green-android-3D.png")}
+              style={styles.avatar}
+            ></Image>
 
-            </View>
+            <View style={styles.mainContainer}>
+              <View style={styles.mainBorderContainer}></View>
+              <View style={styles.mainContentContainer}>
 
-           </View>
+                <StatisticsGrid/>
+
+              </View>
+            </View>
           </>
         ) : (
           <View style={styles.buttonContainer}>
-          
-          <Text style={{color: "white", fontFamily: "SourceCodePro-Bold"}}>log in to track your highscores</Text>
-            <TouchableOpacity onPress={() => {
-              router.push("/login")
-            }} style={styles.loginAndCreateButton}>
+            <Text style={{ color: "white", fontFamily: "SourceCodePro-Bold" }}>
+              log in to track your highscores
+            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                router.push("/login");
+              }}
+              style={styles.loginAndCreateButton}
+            >
               <Text style={styles.buttonText}>Log In</Text>
-             {/*  <FontAwesome name="arrow-right" color={"teal"} size={24} /> */}
+              {/*  <FontAwesome name="arrow-right" color={"teal"} size={24} /> */}
             </TouchableOpacity>
-           {/*  <TextInput style={{backgroundColor: "black", color: "white"}} onChangeText={setUsernameLogin}></TextInput>
+            {/*  <TextInput style={{backgroundColor: "black", color: "white"}} onChangeText={setUsernameLogin}></TextInput>
 
             <TextInput style={{backgroundColor: "blue", color: "white"}} onChangeText={setPasswordLogin}></TextInput> */}
 
-            <TouchableOpacity onPress={() => {
-              router.push("/createAccount")
-            }} style={styles.loginAndCreateButton}>
+            <TouchableOpacity
+              onPress={() => {
+                router.push("/createAccount");
+              }}
+              style={styles.loginAndCreateButton}
+            >
               <Text style={styles.buttonText}>Create Account</Text>
             </TouchableOpacity>
-        </View>
-          
+          </View>
         )}
-       
       </SafeAreaView>
     </SafeAreaProvider>
   );
@@ -67,16 +78,21 @@ const styles = StyleSheet.create({
     padding: 16,
     justifyContent: "start",
     alignItems: "center",
-    gap: 48,
-
+    gap: 24,
   },
   background: {
-    position: 'absolute',
+    position: "absolute",
     left: 0,
     right: 0,
     top: 0,
     //height: 300,
     bottom: 0,
+  },
+  avatar: {
+    width: 80, // width auto doesnt work apparently, but seems to scale proportionally anyways
+    height: 80,
+    //borderRadius: 50,
+    // backgroundColor: "transparent",
   },
   title: {
     //fontFamily: "SourceCodePro_400Regular",
@@ -92,7 +108,7 @@ const styles = StyleSheet.create({
     position: "relative",
     flex: 1, // take up remaining space downwards
     width: "100%",
-   /*  marginRight: "-10%",
+    /*  marginRight: "-10%",
     marginLeft: "-10%", */
   },
   mainBorderContainer: {
@@ -102,34 +118,40 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    
-    marginLeft: -19,
+
+    marginLeft: -19, // we will see the border curving down to the left and right, but they will be hidden after that (outside of the screen)
     marginRight: -19,
     borderStyle: "solid",
     borderWidth: 2,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
     borderColor: "white",
-    marginBottom: -20, // just to take it outside screen/behind tabs menu
+    borderBottomWidth: 0,
+    //marginBottom: -20, // just to take the border outside screen/behind tabs menu
   },
   mainContentContainer: {
-    position: "absolute",
+    /* position: "absolute",
     top: 0,
     left: 0,
     right: 0,
-    bottom: 0,
-    flex: 1,
-    //width: "100%",
-   /*  borderStyle: "solid",
+    bottom: 0, */
+    marginTop: 16, // same as padding 16 in 'container'
+    display: "flex",
+    width: "100%",
+    //flex: 1,
+
+    /*  borderStyle: "solid",
     borderWidth: 2,
     borderColor: "black", */
-
   },
+ 
+  
+
   buttonContainer: {
     width: "100%",
-   /*  backgroundColor: "red", */
+    /*  backgroundColor: "red", */
     padding: 10,
-    paddingTop: 0, // 
+    paddingTop: 0, //
     alignItems: "center",
     gap: 16,
   },
@@ -145,12 +167,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "row", // for if we have arrow-right
-    gap: 16,  // for if we have arrow-right
+    gap: 16, // for if we have arrow-right
   },
   buttonText: {
     color: "teal",
     fontSize: 24,
-   // fontWeight: "bold",
-   fontFamily: "SourceCodePro-Bold"
+    // fontWeight: "bold",
+    fontFamily: "SourceCodePro-Bold",
   },
 });
