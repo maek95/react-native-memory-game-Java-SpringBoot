@@ -62,7 +62,7 @@ public class User {
     this.password = password;
   }
 
-  public Highscore getHighscore() {
+  public Highscore getHighscore() { // get the Highscore class connected to this User
     return highscore;
   }
 

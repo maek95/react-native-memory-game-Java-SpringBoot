@@ -1,14 +1,65 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from "react-native";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { useContext } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../AuthContext";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import StatisticsGrid from "../components/StatisticsGrid";
+import { host } from "../utils";
 
 export default function ProfileTab() {
   /* need backend for this? or just localStorage to only track highscore until person deletes their localStorage? */
-  const { isLoggedIn, currentUsername } = useContext(AuthContext);
+  const { isLoggedIn, currentUsername, token } = useContext(AuthContext);
+  const [hardestDifficulty, setHardestDifficulty] = useState("");
+ 
+
+  // useFocusEffect triggers every time we enter/focus this Tab... useEffect only triggers the first time you enter...
+  useFocusEffect(
+
+    useCallback(() => {
+      fetchUserProfile();
+    }, [])
+  );
+
+  async function fetchUserProfile() {
+    try {
+      const response = await fetch(`${host}:8080/api/users/profile`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Origin': '*',
+        },
+        body: JSON.stringify({ token }),
+        //credentials: "include",
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+      } else {
+
+        const data = await response.json();
+        console.log('User profile extracted from backend successfully:', data);
+
+        if (data.highscore) {
+          setHardestDifficulty(data.highscore.title);
+        }
+      }
+
+
+
+      //setIsAccountCreated(true);
+     /*  setTimeout(() => {
+        
+        router.push("/login");
+      }, 3000); */
+    } catch (error) {
+      console.log(`Error in ${host}:8080/api/users/profile`, error);
+    }
+  }
+
+
+
 
   return (
     <SafeAreaProvider>
@@ -27,11 +78,12 @@ export default function ProfileTab() {
               source={require("../../assets/green-android-3D.png")}
               style={styles.avatar}
             ></Image>
+            {hardestDifficulty ? <Text style={styles.hardestDifficultyText}>Perfected {hardestDifficulty} difficulty</Text> : <Text style={styles.hardestDifficultyText}>You have not beaten any difficulty... yet</Text>}
 
             <View style={styles.mainContainer}>
               <View style={styles.mainBorderContainer}></View>
               <View style={styles.mainContentContainer}>
-
+                
                 <StatisticsGrid/>
 
               </View>
@@ -103,6 +155,13 @@ const styles = StyleSheet.create({
     // fontWeight: "bold",
     textAlign: "center",
     marginTop: 32 /* 48margintop - 16padding from container above */,
+  },
+  hardestDifficultyText: {
+    fontFamily: "SourceCodePro-Regular",
+    fontSize: 14,
+    lineHeight: 14,
+
+    color: "white",
   },
   mainContainer: {
     position: "relative",

@@ -9,7 +9,8 @@ export default function StatisticsGrid() {
       {/* <ScrollView contentContainerStyle={styles.scrollContainer}> */}
 
                
-      <Text style={styles.statisticsTitle}>Statistics</Text>
+      <Text style={styles.statisticsTitle}>Statistics (placeholder)</Text>
+      
       <View style={styles.gridContainer}>
         <StatisticsGridItem difficultyTitle={"Hard"}/>
         <StatisticsGridItem difficultyTitle={"Medium"}/>
@@ -27,20 +28,20 @@ function StatisticsGridItem({difficultyTitle}) {
 
   return (
     <>
-      <View style={styles.statisticsGridItem}>
-        <View style={styles.statisticsGridRow}>
-          <Text style={styles.statisticsGridItemTitle}>{difficultyTitle}</Text>
+      <View style={styles.gridItem}>
+        <View style={styles.gridItemTitleContainer}>
+          <Text style={styles.gridItemTitle}>{difficultyTitle}</Text>
         </View>
-        <View style={styles.statisticsGridRow}>
-          <Text style={styles.statisticsGridText}>Games Played: 1</Text>
-          <Text style={styles.statisticsGridText}>W/L: 1</Text>
+        <View style={styles.gridRow}>
+          <Text style={styles.gridText}>Games Played: 1</Text>
+          <Text style={styles.gridText}>W/L: 1</Text>
           
         </View>
-        <View style={styles.statisticsGridRow}>
-        <Text style={styles.statisticsGridText}>
+        <View style={styles.gridRow}>
+        <Text style={styles.gridText}>
            Win (Perfect): 1
           </Text>
-          <Text style={styles.statisticsGridText}>Lose: 1</Text>
+          <Text style={styles.gridText}>Lose: 1</Text>
         </View>
       </View>
     </>
@@ -56,6 +57,7 @@ const styles = StyleSheet.create({
    // gap: 36,
    position: "relative",
    height: "100%",
+  
    
   },
   scrollContainer: {
@@ -88,28 +90,35 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     //alignItems: "center",
     gap: 28, // double the gap between 
+   
+  },
+  gridItemTitleContainer: {
+    alignItems: "center"
   },
 
-  statisticsGridItem: {
+  gridItem: {
     // grid doesnt exist in react native apparently
     // display: flex is default
     //justifyContent: "space-evenly",
     gap: 14,
+    
   },
-  statisticsGridRow: {
-    display: "flex",
+  gridRow: {
+    
+   // alignItems: "center",
     flexDirection: "row",
     justifyContent: "space-between",
     
   },
-  statisticsGridItemTitle: {
+  gridItemTitle: {
     fontFamily: "SourceCodePro-Bold",
     color: "white",
     lineHeight: 14,
     fontSize: 14,
+    //textAlign: "center",
     
   },
-  statisticsGridText: {
+  gridText: {
     fontFamily: "SourceCodePro-Regular",
     lineHeight: 14,
     fontSize: 14,

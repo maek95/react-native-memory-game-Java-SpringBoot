@@ -15,12 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.demo.HighscoreDTO;
 import com.example.demo.exception.CustomException;
 import com.example.demo.exception.ErrorResponse;
+import com.example.demo.util.JwtUtil;
 
 @RestController
 @RequestMapping("/api/users") // All endpoints in the UserController will start with /api/users, making it clear that they belong to the user-related API.
 public class UserController {
   @Autowired // The @Autowired annotation ensures that the correct Class(??) instance is injected where needed.
   private UserService userService;
+
+  @Autowired
+  private JwtUtil jwtUtil;
 
   @PostMapping("/register")
   public UserDTO registerUser(@RequestBody User user) 
@@ -47,6 +51,23 @@ public class UserController {
  }
  */
 
+ @PostMapping("/profile")
+ public ResponseEntity<?> getUserProfile(@RequestBody TokenRequest tokenRequest) {
+     try {
+       String username = jwtUtil.extractUsername(tokenRequest.getToken());
+       // maybe bad method name 'getUserWithHighscore' since UserDTO always includes the user's Highscore
+       UserDTO userDTO = userService.getUserWithHighscore(username);
+
+       return new ResponseEntity<>(userDTO, HttpStatus.OK);
+     } catch (Exception e) {
+
+      return new ResponseEntity<>(new ErrorResponse("Error retrieving user information", HttpStatus.INTERNAL_SERVER_ERROR.value()), HttpStatus.INTERNAL_SERVER_ERROR);
+
+     }
+    
+ }
+ 
+
   // just so I can view all created users, wont actually be used otherwise
   @GetMapping("/all")
     public List<UserDTO> getAllUsers() {
@@ -67,4 +88,24 @@ public class UserController {
                     .toList(); // Converting User to UserDTO */
               
     }
+
+
+     // Class to receive the token from the frontend
+     static class TokenRequest {
+      private String token;
+
+      public TokenRequest() {}
+
+      public TokenRequest(String token) {
+          this.token = token;
+      }
+
+      public String getToken() {
+          return token;
+      }
+
+      public void setToken(String token) {
+          this.token = token;
+      }
+  }
 }

@@ -25,7 +25,7 @@ export default function CreateAccount() {
           'Origin': '*',
         },
         body: JSON.stringify({ username, password }),
-        credentials: "include",
+        credentials: "include", // not using cookies, unnecessary
       });
 
       if (!response.ok) {

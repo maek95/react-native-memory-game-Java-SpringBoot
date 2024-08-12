@@ -49,7 +49,8 @@ public class UserService {
     return userRepository.findAll();
   }
 
-  // currently not used
+  // sent to frontend to populate profile page... (/profile endpoint).
+  // maybe bad method name since UserDTO always includes the user's Highscore
   public UserDTO getUserWithHighscore (String username) {
     Optional<User> optionalUser = userRepository.findByUsername(username);
 
@@ -60,9 +61,12 @@ public class UserService {
 
     // get user as we now know it exists
     User user = optionalUser.get(); 
-    Optional<Highscore> optionalHighscore = highscoreRepository.findByUser(user);
+    Optional<Highscore> optionalHighscore = highscoreRepository.findByUser(user); // Optional because new users won't have a highscore
 
-    Highscore highscore = optionalHighscore.orElse(null);
+    // highscore = null if there is no highscore
+    Highscore highscore = optionalHighscore.orElse(null); 
+
+    // create highscoreDTO if user has a highscore
     HighscoreDTO highscoreDTO = highscore != null ? new HighscoreDTO(highscore.getId(), highscore.getTitle(), highscore.getSequenceLength(), user.getUsername()) : null; // null highscoreDTO if no highscore found
 
     return new UserDTO(user.getId(), user.getUsername(), highscoreDTO);

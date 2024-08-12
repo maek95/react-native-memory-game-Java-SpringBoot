@@ -23,7 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      // Converts the User object to a Spring Security UserDetails object.
     User user = userRepository.findByUsername(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-    
+    // Spring Security stuff... 
     return org.springframework.security.core.userdetails.User.withUsername(user.getUsername()).password(user.getPassword()).authorities("USER").build();
 
     // same thing as above but requires you to manage the list of authorities manually...?

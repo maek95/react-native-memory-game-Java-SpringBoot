@@ -54,8 +54,7 @@ public class AuthenticationController {
     );
 
     // UserDetails is an interface provided by Spring Security. It provides core user information such as username, password, and authorities (roles or permissions). The UserDetails interface abstracts the user information needed for authentication.
-    
-    final UserDetails userDetails = userDetailsService.loadUserByUsername(authentication.getUsername());
+    final UserDetails userDetails = userDetailsService.loadUserByUsername(authentication.getUsername()); // loadUserByUsername is a built-in method that follows security checks or something...
     final String jwt = jwtTokenUtil.generateToken(userDetails.getUsername());
     //final String titleDifficultyPerfected = userDetails
 

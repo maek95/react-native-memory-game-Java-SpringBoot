@@ -24,11 +24,13 @@ export function AuthProvider({children}) {
   const [token, setToken] = useState(null);
   const [currentUsername, setCurrentUsername] = useState("");
 
+  // backend needs to be running to verify token :)
   useEffect(() => {
-    if (token) { 
+    if (token) { // 'null' token 
       verifyToken(token); // see if user still exists in backend when loading in frontend. Backend-data may have been deleted
     }
-  }, [])
+  }, [token]) // having just [] did not work, token is not extracted from SecureStore at this stage since AuthContext is wrapping the app or something...
+  
 
   async function verifyToken(token) {
     try {
@@ -47,11 +49,16 @@ export function AuthProvider({children}) {
         
         await SecureStore.deleteItemAsync('userToken');
         await SecureStore.deleteItemAsync('username');
+
         setIsLoggedIn(false);
+        setCurrentUsername("");
+        setToken(null);
 
       } else {
 
         const data = await response.json();
+
+        // this 'data' contains the highscoreDTO that has the jwt-token as an attribute, is that bad? We need to acquire the token somehow? I think I have to do it this way unless I decide to use cookies instead?
         console.log("Verification success:", data);
         
         // not needed, we 
